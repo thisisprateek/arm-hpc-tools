@@ -1,4 +1,4 @@
-FROM arm64v8/ubuntu:18.04 as builder
+FROM ubuntu:18.04 as builder
 
 USER root
 
