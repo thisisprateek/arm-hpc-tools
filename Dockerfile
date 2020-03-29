@@ -1,10 +1,11 @@
-FROM ubuntu:18.04 as builder
+FROM arm64v8/ubuntu as builder
 
 USER root
 
 # Install pre reqs
 ENV DEBIAN_FRONTEND=noninteractive 
 RUN apt-get update && apt-get install -y \
+      apt-utils \
       psmisc \
       tcl \
       environment-modules \
@@ -26,6 +27,7 @@ RUN apt-get update && apt-get install -y \
       libfontconfig-dev \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+
 WORKDIR /tmp
 
 # Instruction Emulator
@@ -37,7 +39,7 @@ COPY modulefiles /opt/arm/modulefiles/
 
 # By rebuilding the image from scratch, and copying in the result
 # we save image size
-FROM ubuntu:18.04
+FROM arm64v8/ubuntu
 COPY --from=builder / /
 
 RUN useradd -ms /bin/bash user
@@ -45,4 +47,3 @@ USER user
 WORKDIR /home/user
 
 CMD ["bash", "-l"]
-
